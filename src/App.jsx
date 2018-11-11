@@ -10,28 +10,41 @@ class App extends Component {
 
     const scene = new THREE.Scene();
     const camera = new THREE.PerspectiveCamera(
-      75,
+      45,
       width / height,
-      0.1,
-      1000
+      1,
+      500
     );
+    camera.position.set(0, 0, 100);
+    camera.lookAt(0, 0, 0);
     const renderer = new THREE.WebGLRenderer({ antialias: true });
-    const geometry = new THREE.BoxGeometry(1, 1, 1);
-    const material = new THREE.MeshBasicMaterial({ color: '#433F81' });
-    const cube = new THREE.Mesh(geometry, material);
-
-    camera.position.z = 4;
-    scene.add(cube);
-    renderer.setClearColor('#000000');
+    renderer.setClearColor('#b8b');
     renderer.setSize(width, height);
+    this.mount.current.appendChild(renderer.domElement);
+
+    /*  const geometry = new THREE.BoxGeometry(5, 4, 3);
+     const material = new THREE.MeshBasicMaterial({ color: '#433F81' });
+     const cube = new THREE.Mesh(geometry, material);
+     scene.add(cube); */
+
+    const material = new THREE.LineBasicMaterial({ color: 0x0000ff });
+    const geometry = new THREE.Geometry();
+    geometry.vertices.push(new THREE.Vector3(13, 0, 0));
+    geometry.vertices.push(new THREE.Vector3(0, -10, 0));
+    geometry.vertices.push(new THREE.Vector3(10, 0, -100));
+    geometry.vertices.push(new THREE.Vector3(15, -11, 0));
+    geometry.vertices.push(new THREE.Vector3(13, 0, 0));
+    const line = new THREE.Line(geometry, material);
+    scene.add(line);
+
+    camera.position.z = 70;
 
     this.scene = scene;
     this.camera = camera;
     this.renderer = renderer;
     this.material = material;
-    this.cube = cube;
-
-    this.mount.current.appendChild(this.renderer.domElement);
+    this.line = line;
+    // this.cube = cube;
   }
 
   componentWillUnmount() {
@@ -48,8 +61,8 @@ class App extends Component {
   }
 
   animate = () => {
-    this.cube.rotation.x += 0.02;
-    this.cube.rotation.y += 0.01;
+    /*     this.cube.rotation.x += 0.02;
+        this.cube.rotation.y += 0.01; */
 
     this.renderScene();
     this.frameId = window.requestAnimationFrame(this.animate);
